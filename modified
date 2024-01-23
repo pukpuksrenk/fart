@@ -361,7 +361,7 @@ UIAspectRatioConstraint_2.Parent = show
 local function FBIDUWB_fake_script() -- MainFrame.LocalScript 
 	local script = Instance.new('LocalScript', MainFrame)
 
-	function getroot(plr)
+	local function getroot(plr)
 		return plr.Character:WaitForChild("HumanoidRootPart")
 	end
 	local RVelocity = nil
@@ -369,11 +369,11 @@ local function FBIDUWB_fake_script() -- MainFrame.LocalScript
 	local fixpos = getroot(localplr).Position
 	local root =  getroot(localplr)
 	local whitelist = {}
-	function GetPing()
+	local function GetPing()
 		return (game:GetService("Stats").Network.ServerStatsItem["Data Ping"]:GetValue())/1000
 	end
 	local function PredictionTP(player,method)
-		local root = player.Character:WaitForChild("HumanoidRootPart")
+		local root = getroot(player)
 		local pos = root.Position
 		local vel = root.Velocity
 		root.CFrame = CFrame.new((pos.X)+(vel.X)*(GetPing()*3.5),(pos.Y)+(vel.Y)*(GetPing()*2),(pos.Z)+(vel.Z)*(GetPing()*3.5))
@@ -384,7 +384,7 @@ local function FBIDUWB_fake_script() -- MainFrame.LocalScript
 			root.CFrame = CFrame.new((pos.X)+(vel.X)*(GetPing()*3.5),(pos.Y)+(vel.Y)*(GetPing()*2),(pos.Z)+(vel.Z)*(GetPing()*3.5))
 		end
 	end
-	function toggle_but(v)
+	local function toggle_but(v)
 		script.Parent.Click:Play()
 		if v.Text == "✓" then
 			v.Text = ""
@@ -436,23 +436,23 @@ local function FBIDUWB_fake_script() -- MainFrame.LocalScript
 			end
 		end)
 	end
-	function getpfp(user)
+	local function getpfp(user)
 	local image,bool = game.Players:GetUserThumbnailAsync(user,Enum.ThumbnailType.HeadShot,Enum.ThumbnailSize.Size420x420)
 	return image
 	end
 	local mode_fling = 1
-	function raznos_all(val)
+	local function raznos_all(val)
 		if val then
 			task.spawn(function()
 				repeat 
 		for i,v in pairs(game.Players:GetPlayers()) do
 			pcall(function()
 				if (v ~= localplr) and (not table.find(whitelist,v.UserId)) then
-					if mode_fling>1 then
+					--if mode_fling>1 then
 									if mode_fling == 2 and getroot(v).Position > 2048.75 then
 					PredictionTP(v)
 					task.wait(GetPing()+0.05)
-					end
+				--	end
 				end
 					end
 			end)
@@ -461,7 +461,7 @@ local function FBIDUWB_fake_script() -- MainFrame.LocalScript
 		end)
 		end
 	end
-	function getplr(UserDisplay)
+	local function getplr(UserDisplay)
 		if UserDisplay ~= "" then
 			for i,v in pairs(game.Players:GetPlayers()) do
 				if v.Name:lower():match(UserDisplay) or v.DisplayName:lower():match(UserDisplay) then
@@ -485,7 +485,7 @@ local function FBIDUWB_fake_script() -- MainFrame.LocalScript
 			script.Parent.Frame.whitelist.Text = ""
 		end
 	end)
-	function sit_protect(bool)
+	local function sit_protect(bool)
 		task.spawn(function()
 			if bool then
 				local RVelocity = nil
@@ -506,7 +506,7 @@ local function FBIDUWB_fake_script() -- MainFrame.LocalScript
 			end
 		end)
 	end
-	function whitelistcheck(plr)
+	local function whitelistcheck(plr)
 		if table.find(whitelist,plr) then
 			return ""
 		else
