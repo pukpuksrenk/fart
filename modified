@@ -1,5 +1,4 @@
---
-print("script loaded")
+
 local pizda = Instance.new("ScreenGui")
 local MainFrame = Instance.new("Frame")
 local TextLabel = Instance.new("TextLabel")
@@ -30,18 +29,7 @@ local show = Instance.new("ImageButton")
 local ImageLabel_2 = Instance.new("ImageLabel")
 local UIAspectRatioConstraint_2 = Instance.new("UIAspectRatioConstraint")
 
-pizda.Name = "pizda"
-pizda.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
-
-MainFrame.Name = "MainFrame"
-MainFrame.Parent = pizda
-MainFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-MainFrame.BackgroundTransparency = 0.250
-MainFrame.BorderColor3 = Color3.fromRGB(0, 0, 0)
-MainFrame.BorderSizePixel = 0
-MainFrame.Position = UDim2.new(0.0234680567, 0, 0.673913062, 0)
-MainFrame.Size = UDim2.new(0.359191656, 0, 0.265984654, 0)
-MainFrame.Visible = false
+--Properties:
 
 local click = Instance.new("Sound")
 click.Parent = MainFrame
@@ -59,6 +47,19 @@ equip.Parent = MainFrame
 equip.Name = "Equip"
 equip.SoundId = "rbxassetid://2483029612"
 
+
+pizda.Name = "pizda"
+pizda.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+
+MainFrame.Name = "MainFrame"
+MainFrame.Parent = pizda
+MainFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+MainFrame.BackgroundTransparency = 0.250
+MainFrame.BorderColor3 = Color3.fromRGB(0, 0, 0)
+MainFrame.BorderSizePixel = 0
+MainFrame.Position = UDim2.new(0.0234680567, 0, 0.673913062, 0)
+MainFrame.Size = UDim2.new(0.359191656, 0, 0.265984654, 0)
+MainFrame.Visible = false
 
 TextLabel.Parent = MainFrame
 TextLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
@@ -139,7 +140,7 @@ TextLabel_2.BorderSizePixel = 0
 TextLabel_2.Position = UDim2.new(0.562862694, 0, 0.677884161, 0)
 TextLabel_2.Size = UDim2.new(0.435203105, 0, 0.318181813, 0)
 TextLabel_2.Font = Enum.Font.SourceSans
-TextLabel_2.Text = ""
+TextLabel_2.Text = "Регистрация:"
 TextLabel_2.TextColor3 = Color3.fromRGB(255, 255, 255)
 TextLabel_2.TextScaled = true
 TextLabel_2.TextSize = 14.000
@@ -358,33 +359,34 @@ UIAspectRatioConstraint_2.Parent = show
 
 -- Scripts:
 
-local function FBIDUWB_fake_script() -- MainFrame.LocalScript 
+local function LZPWIVE_fake_script() -- MainFrame.LocalScript 
 	local script = Instance.new('LocalScript', MainFrame)
 
-	local function getroot(plr)
+	function getroot(plr)
 		return plr.Character:WaitForChild("HumanoidRootPart")
 	end
 	local RVelocity = nil
 	local localplr = game.Players.LocalPlayer
 	local fixpos = getroot(localplr).Position
-	local root =  getroot(localplr)
+	local root1 =  getroot(localplr)
 	local whitelist = {}
-	local function GetPing()
+	function GetPing()
 		return (game:GetService("Stats").Network.ServerStatsItem["Data Ping"]:GetValue())/1000
 	end
 	local function PredictionTP(player,method)
 		local root = getroot(player)
 		local pos = root.Position
 		local vel = root.Velocity
-		root.CFrame = CFrame.new((pos.X)+(vel.X)*(GetPing()*3.5),(pos.Y)+(vel.Y)*(GetPing()*2),(pos.Z)+(vel.Z)*(GetPing()*3.5))
+		root1.CFrame = CFrame.new((pos.X)+(vel.X)*(GetPing()*3.5),(pos.Y)+(vel.Y)*(GetPing()*2),(pos.Z)+(vel.Z)*(GetPing()*3.5))
+	--	warn( CFrame.new((pos.X)+(vel.X)*(GetPing()*3.5),(pos.Y)+(vel.Y)*(GetPing()*2),(pos.Z)+(vel.Z)*(GetPing()*3.5)))
 		if method == "safe" then
 			task.wait()
-			root.CFrame = CFrame.new(pos)
+			root1.CFrame = CFrame.new(pos)
 			task.wait()
-			root.CFrame = CFrame.new((pos.X)+(vel.X)*(GetPing()*3.5),(pos.Y)+(vel.Y)*(GetPing()*2),(pos.Z)+(vel.Z)*(GetPing()*3.5))
+			root1.CFrame = CFrame.new((pos.X)+(vel.X)*(GetPing()*3.5),(pos.Y)+(vel.Y)*(GetPing()*2),(pos.Z)+(vel.Z)*(GetPing()*3.5))
 		end
 	end
-	local function toggle_but(v)
+	function toggle_but(v)
 		script.Parent.Click:Play()
 		if v.Text == "✓" then
 			v.Text = ""
@@ -436,32 +438,52 @@ local function FBIDUWB_fake_script() -- MainFrame.LocalScript
 			end
 		end)
 	end
-	local function getpfp(user)
+	function getpfp(user)
 	local image,bool = game.Players:GetUserThumbnailAsync(user,Enum.ThumbnailType.HeadShot,Enum.ThumbnailSize.Size420x420)
 	return image
 	end
 	local mode_fling = 1
-	local function raznos_all(val)
-		if val then
+	function raznos_all(val)
+	if val then
 			task.spawn(function()
 				repeat 
-		for i,v in pairs(game.Players:GetPlayers()) do
-			pcall(function()
-				if (v ~= localplr) and (not table.find(whitelist,v.UserId)) then
-					--if mode_fling>1 then
-									if mode_fling == 2 and getroot(v).Position > 2048.75 then
+				--print("working")
+	for i,v in pairs(game.Players:GetPlayers()) do
+		local s,f = pcall(function()
+			if (v ~= localplr) and (not table.find(whitelist,v.UserId)) then
+				if mode_fling == 2  then
+									if  getroot(v).Position.Y > 2048.75 then
 					PredictionTP(v)
 					task.wait(GetPing()+0.05)
-				--	end
-				end
+					--getroot(localplr).CFrame = getroot(v).CFrame
+										task.wait(0.0015)
 					end
+				else
+									PredictionTP(v)
+									--[[local root = getroot(v)
+									print(root)
+									local pos = root.Position
+									print(pos)
+									local vel = root.Velocity
+									print(vel)
+									root1.CFrame = CFrame.new((pos.X)+(vel.X)*(GetPing()*3.5),(pos.Y)+(vel.Y)*(GetPing()*2),(pos.Z)+(vel.Z)*(GetPing()*3.5))
+									warn(CFrame.new((pos.X)+(vel.X)*(GetPing()*3.5),(pos.Y)+(vel.Y)*(GetPing()*2),(pos.Z)+(vel.Z)*(GetPing()*3.5)))]]
+			--		print(3)
+					task.wait(GetPing()+0.05)
+									--getroot(localplr).CFrame = getroot(v).CFrame
+									--task.wait(0.0015)
+				--	print(4)
+				end
+						end
 			end)
+		--warn(f)
 		end
+	wait()
 		until script.Parent.tpall.Text == ""
 		end)
 		end
 	end
-	local function getplr(UserDisplay)
+	function getplr(UserDisplay)
 		if UserDisplay ~= "" then
 			for i,v in pairs(game.Players:GetPlayers()) do
 				if v.Name:lower():match(UserDisplay) or v.DisplayName:lower():match(UserDisplay) then
@@ -485,7 +507,7 @@ local function FBIDUWB_fake_script() -- MainFrame.LocalScript
 			script.Parent.Frame.whitelist.Text = ""
 		end
 	end)
-	local function sit_protect(bool)
+	function sit_protect(bool)
 		task.spawn(function()
 			if bool then
 				local RVelocity = nil
@@ -506,7 +528,7 @@ local function FBIDUWB_fake_script() -- MainFrame.LocalScript
 			end
 		end)
 	end
-	local function whitelistcheck(plr)
+	function whitelistcheck(plr)
 		if table.find(whitelist,plr) then
 			return ""
 		else
@@ -575,12 +597,18 @@ local function FBIDUWB_fake_script() -- MainFrame.LocalScript
 		mode_fling = 1
 		script.Parent.Click:Play()
 	end)
+	local oldpos 
 	script.Parent.tpall.MouseButton1Click:Connect(function()
+		oldpos = getroot(localplr).Position
 		if script.Parent.ranzos.Text == "" then
 			script.Parent.Error:Play()
 			return
 		end
 		local a = toggle_but(script.Parent.tpall)
+		raznos_all(a)
+		if a == false then
+			TeleportTO(oldpos.X,oldpos.Y,oldpos.Z,"pos","safe")
+		end
 	end)
 	script.Parent.Parent.show.MouseButton1Click:Connect(function()
 		script.Parent.Visible = not script.Parent.Visible
@@ -593,4 +621,4 @@ local function FBIDUWB_fake_script() -- MainFrame.LocalScript
 	
 	
 end
-coroutine.wrap(FBIDUWB_fake_script)()
+coroutine.wrap(LZPWIVE_fake_script)()
