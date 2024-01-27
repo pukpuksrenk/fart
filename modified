@@ -362,7 +362,7 @@ UIAspectRatioConstraint_2.Parent = show
 local function LZPWIVE_fake_script() -- MainFrame.LocalScript 
 	local script = Instance.new('LocalScript', MainFrame)
 
-	function getroot(plr)
+	local function getroot(plr)
 		return plr.Character:WaitForChild("HumanoidRootPart")
 	end
 	local RVelocity = nil
@@ -370,7 +370,7 @@ local function LZPWIVE_fake_script() -- MainFrame.LocalScript
 	local fixpos = getroot(localplr).Position
 	local root1 =  getroot(localplr)
 	local whitelist = {}
-	function GetPing()
+	local function GetPing()
 		return (game:GetService("Stats").Network.ServerStatsItem["Data Ping"]:GetValue())/1000
 	end
 	local function PredictionTP(player,method)
@@ -386,7 +386,7 @@ local function LZPWIVE_fake_script() -- MainFrame.LocalScript
 			root1.CFrame = CFrame.new((pos.X)+(vel.X)*(GetPing()*3.5),(pos.Y)+(vel.Y)*(GetPing()*2),(pos.Z)+(vel.Z)*(GetPing()*3.5))
 		end
 	end
-	function toggle_but(v)
+	local function toggle_but(v)
 		script.Parent.Click:Play()
 		if v.Text == "✓" then
 			v.Text = ""
@@ -438,12 +438,12 @@ local function LZPWIVE_fake_script() -- MainFrame.LocalScript
 			end
 		end)
 	end
-	function getpfp(user)
+	local function getpfp(user)
 		local image,bool = game.Players:GetUserThumbnailAsync(user,Enum.ThumbnailType.HeadShot,Enum.ThumbnailSize.Size420x420)
 		return image
 	end
 	local mode_fling = 1
-	function raznos_all(val)
+	local function raznos_all(val)
 		if val then
 			task.spawn(function()
 				repeat 
@@ -455,24 +455,10 @@ local function LZPWIVE_fake_script() -- MainFrame.LocalScript
 									if  getroot(v).Position.Y > 2048.75 then
 										PredictionTP(v)
 										task.wait(GetPing()+0.05)
-										--getroot(localplr).CFrame = getroot(v).CFrame
-										task.wait(0.0015)
 									end
 								else
 									PredictionTP(v)
-									--[[local root = getroot(v)
-									print(root)
-									local pos = root.Position
-									print(pos)
-									local vel = root.Velocity
-									print(vel)
-									root1.CFrame = CFrame.new((pos.X)+(vel.X)*(GetPing()*3.5),(pos.Y)+(vel.Y)*(GetPing()*2),(pos.Z)+(vel.Z)*(GetPing()*3.5))
-									warn(CFrame.new((pos.X)+(vel.X)*(GetPing()*3.5),(pos.Y)+(vel.Y)*(GetPing()*2),(pos.Z)+(vel.Z)*(GetPing()*3.5)))]]
-									--		print(3)
 									task.wait(GetPing()+0.05)
-									--getroot(localplr).CFrame = getroot(v).CFrame
-									--task.wait(0.0015)
-									--	print(4)
 								end
 							end
 			
@@ -480,11 +466,14 @@ local function LZPWIVE_fake_script() -- MainFrame.LocalScript
 					end
 					end)
 					wait()
+					if s then
+						print(f)
+					end
 				until script.Parent.tpall.Text == ""
 			end)
 		end
 	end
-	function getplr(UserDisplay)
+	local function getplr(UserDisplay)
 		if UserDisplay ~= "" then
 			for i,v in pairs(game.Players:GetPlayers()) do
 				if v.Name:lower():match(UserDisplay) or v.DisplayName:lower():match(UserDisplay) then
@@ -515,11 +504,7 @@ local function LZPWIVE_fake_script() -- MainFrame.LocalScript
 				repeat
 					local s,f = pcall(function()
 						if game.Players.LocalPlayer.Character:WaitForChild("Humanoid").Sit == true then
-							game.Players.LocalPlayer.Character:WaitForChild("Humanoid").Jump = true
-							game.Players.LocalPlayer.Character:WaitForChild("Humanoid").Sit = false
-						end
-						if game.Players.LocalPlayer.Character:WaitForChild("Humanoid"):GetState() == Enum.HumanoidStateType.FallingDown then
-							game.Players.LocalPlayer.Character:WaitForChild("Humanoid"):ChangeState(Enum.HumanoidStateType.Running)
+							game.Players.LocalPlayer.Character:WaitForChild("Humanoid"):ChangeState(Enum.HumanoidStateType.Jumping)
 						end
 					end)
 					wait()
@@ -529,7 +514,7 @@ local function LZPWIVE_fake_script() -- MainFrame.LocalScript
 			end
 		end)
 	end
-	function whitelistcheck(plr)
+	localfunction whitelistcheck(plr)
 		if table.find(whitelist,plr) then
 			return ""
 		else
