@@ -367,13 +367,19 @@ local function LZPWIVE_fake_script() -- MainFrame.LocalScript
 	end
 	local RVelocity = nil
 	local localplr = game.Players.LocalPlayer
+	local humanoid = localplr.Character:WaitForChild("Humanoid")
 	local fixpos = getroot(localplr).Position
 	local root1 =  getroot(localplr)
 	local whitelist = {}
 	local function GetPing()
 		return (game:GetService("Stats").Network.ServerStatsItem["Data Ping"]:GetValue())/1000
 	end
+	humanoid.Died:Connect(function()
+	--tpall.Text = ""
+	
+	end)
 	local function PredictionTP(player,method)
+		pcall(function()
 		local root = getroot(player)
 		local pos = root.Position
 		local vel = root.Velocity
@@ -385,6 +391,7 @@ local function LZPWIVE_fake_script() -- MainFrame.LocalScript
 			task.wait()
 			root1.CFrame = CFrame.new((pos.X)+(vel.X)*(GetPing()*3.5),(pos.Y)+(vel.Y)*(GetPing()*2),(pos.Z)+(vel.Z)*(GetPing()*3.5))
 		end
+		end)
 	end
 	local function toggle_but(v)
 		script.Parent.Click:Play()
