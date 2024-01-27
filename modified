@@ -572,7 +572,7 @@ local function LZPWIVE_fake_script() -- MainFrame.LocalScript
 		script.Parent.rezhimi.Visible = not script.Parent.rezhimi.Visible
 	end)
 	script.Parent.rezhimi.ScrollingFrame.kanava.MouseButton1Click:Connect(function()
-		if game.GameId ~= 7002808196 then
+		if game.PlaceId ~= 7002808196 then
 			script.Parent.Error:Play()
 			return
 		end
