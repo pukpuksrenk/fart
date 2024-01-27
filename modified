@@ -514,7 +514,7 @@ local function LZPWIVE_fake_script() -- MainFrame.LocalScript
 			end
 		end)
 	end
-	localfunction whitelistcheck(plr)
+	local function whitelistcheck(plr)
 		if table.find(whitelist,plr) then
 			return ""
 		else
