@@ -378,7 +378,7 @@ local function LZPWIVE_fake_script() -- MainFrame.LocalScript
 		local pos = root.Position
 		local vel = root.Velocity
 		root1.CFrame = CFrame.new((pos.X)+(vel.X)*(GetPing()*3.5),(pos.Y)+(vel.Y)*(GetPing()*2),(pos.Z)+(vel.Z)*(GetPing()*3.5))
-	--	warn( CFrame.new((pos.X)+(vel.X)*(GetPing()*3.5),(pos.Y)+(vel.Y)*(GetPing()*2),(pos.Z)+(vel.Z)*(GetPing()*3.5)))
+		--	warn( CFrame.new((pos.X)+(vel.X)*(GetPing()*3.5),(pos.Y)+(vel.Y)*(GetPing()*2),(pos.Z)+(vel.Z)*(GetPing()*3.5)))
 		if method == "safe" then
 			task.wait()
 			root1.CFrame = CFrame.new(pos)
@@ -439,26 +439,26 @@ local function LZPWIVE_fake_script() -- MainFrame.LocalScript
 		end)
 	end
 	function getpfp(user)
-	local image,bool = game.Players:GetUserThumbnailAsync(user,Enum.ThumbnailType.HeadShot,Enum.ThumbnailSize.Size420x420)
-	return image
+		local image,bool = game.Players:GetUserThumbnailAsync(user,Enum.ThumbnailType.HeadShot,Enum.ThumbnailSize.Size420x420)
+		return image
 	end
 	local mode_fling = 1
 	function raznos_all(val)
-	if val then
+		if val then
 			task.spawn(function()
 				repeat 
-				--print("working")
-	for i,v in pairs(game.Players:GetPlayers()) do
-		local s,f = pcall(function()
-			if (v ~= localplr) and (not table.find(whitelist,v.UserId)) then
-				if mode_fling == 2  then
+					--print("working"
+					local s,f = pcall(function()
+					for i,v in pairs(game.Players:GetPlayers()) do
+							if (v ~= localplr) and (not table.find(whitelist,v.UserId)) then
+								if mode_fling == 2  then
 									if  getroot(v).Position.Y > 2048.75 then
-					PredictionTP(v)
-					task.wait(GetPing()+0.05)
-					--getroot(localplr).CFrame = getroot(v).CFrame
+										PredictionTP(v)
+										task.wait(GetPing()+0.05)
+										--getroot(localplr).CFrame = getroot(v).CFrame
 										task.wait(0.0015)
-					end
-				else
+									end
+								else
 									PredictionTP(v)
 									--[[local root = getroot(v)
 									print(root)
@@ -468,19 +468,20 @@ local function LZPWIVE_fake_script() -- MainFrame.LocalScript
 									print(vel)
 									root1.CFrame = CFrame.new((pos.X)+(vel.X)*(GetPing()*3.5),(pos.Y)+(vel.Y)*(GetPing()*2),(pos.Z)+(vel.Z)*(GetPing()*3.5))
 									warn(CFrame.new((pos.X)+(vel.X)*(GetPing()*3.5),(pos.Y)+(vel.Y)*(GetPing()*2),(pos.Z)+(vel.Z)*(GetPing()*3.5)))]]
-			--		print(3)
-					task.wait(GetPing()+0.05)
+									--		print(3)
+									task.wait(GetPing()+0.05)
 									--getroot(localplr).CFrame = getroot(v).CFrame
 									--task.wait(0.0015)
-				--	print(4)
-				end
-						end
+									--	print(4)
+								end
+							end
+			
+						--warn(f)
+					end
+					end)
+					wait()
+				until script.Parent.tpall.Text == ""
 			end)
-		--warn(f)
-		end
-	wait()
-		until script.Parent.tpall.Text == ""
-		end)
 		end
 	end
 	function getplr(UserDisplay)
@@ -539,10 +540,10 @@ local function LZPWIVE_fake_script() -- MainFrame.LocalScript
 		local aaa,bbb = getplr(script.Parent.Frame.TextBox.Text)
 		choosed = aaa
 		if aaa and bbb then
-	script.Parent.Frame.Name1.Text = aaa.Name
-	script.Parent.Frame.ImageLabel.Image = bbb
-		script.Parent.Frame.whitelist.Text =  whitelistcheck(aaa.UserId)
-		script.Parent.Frame.TextLabel.Text = ("Зарегался: "..os.date("%d-%m-%Y", os.time()-aaa.AccountAge * 24 * 3600).." [День/Месяц/Год]")
+			script.Parent.Frame.Name1.Text = aaa.Name
+			script.Parent.Frame.ImageLabel.Image = bbb
+			script.Parent.Frame.whitelist.Text =  whitelistcheck(aaa.UserId)
+			script.Parent.Frame.TextLabel.Text = ("Зарегался: "..os.date("%d-%m-%Y", os.time()-aaa.AccountAge * 24 * 3600).." [День/Месяц/Год]")
 		else
 			script.Parent.Frame.Name1.Text =""
 			script.Parent.Frame.ImageLabel.Image = ""
@@ -564,14 +565,14 @@ local function LZPWIVE_fake_script() -- MainFrame.LocalScript
 		end
 		script.Parent.Frame.whitelist.Text =  whitelistcheck(choosed.UserId)
 	end)
-	
+
 	--
 	script.Parent.sit_protect.MouseButton1Click:Connect(function()
 		local a = toggle_but(script.Parent.sit_protect)
 		sit_protect(a)
 	end)
 	script.Parent.ranzos.MouseButton1Click:Connect(function()
-	local a=	toggle_but(script.Parent.ranzos)
+		local a=	toggle_but(script.Parent.ranzos)
 		local fixpos = getroot(localplr).Position
 		ToggleFling(a)
 		TeleportTO(fixpos.X,fixpos.Y,fixpos.Z,"pos","safe")
@@ -615,10 +616,10 @@ local function LZPWIVE_fake_script() -- MainFrame.LocalScript
 		script.Parent.Click:Play()
 	end)
 	--
-	
-	
-	
-	
-	
+
+
+
+
+
 end
 coroutine.wrap(LZPWIVE_fake_script)()
