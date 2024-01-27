@@ -49,7 +49,7 @@ equip.SoundId = "rbxassetid://2483029612"
 
 
 pizda.Name = "pizda"
-pizda.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+pizda.Parent = game.CoreGui
 
 MainFrame.Name = "MainFrame"
 MainFrame.Parent = pizda
