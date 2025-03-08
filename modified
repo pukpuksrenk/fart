@@ -111,7 +111,7 @@ function Flux:Window(text, bottom,mainclr,toclose)
 	MainFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
 	MainFrame.Size = UDim2.new(0, 0, 0, 0)
 
-	MainCorner.CornerRadius = UDim.new(0, 5)
+	MainCorner.CornerRadius = UDim.new(0, 16)
 	MainCorner.Name = "MainCorner"
 	MainCorner.Parent = MainFrame
 
@@ -120,7 +120,7 @@ function Flux:Window(text, bottom,mainclr,toclose)
 	LeftFrame.BackgroundColor3 = Color3.fromRGB(15,15,15)
 	LeftFrame.Size = UDim2.new(0, 205, 0, 484)
 
-	LeftCorner.CornerRadius = UDim.new(0, 8)
+	LeftCorner.CornerRadius = UDim.new(0, 16)
 	LeftCorner.Name = "LeftCorner"
 	LeftCorner.Parent = LeftFrame
 
@@ -440,6 +440,7 @@ function Flux:Window(text, bottom,mainclr,toclose)
 		
 		UICorner.Name = "UICorner"
 		UICorner.Parent = Tab
+		UICorner.CornerRadius = UDim.new(0,8)
 		
 		UIStroke.Name = "UIStroke"
 		UIStroke.Color = Color3.fromRGB(21,21,21)
