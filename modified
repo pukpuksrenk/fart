@@ -441,9 +441,11 @@ function Flux:Window(text, bottom,mainclr,toclose)
 		UICorner.Name = "UICorner"
 		UICorner.Parent = Tab
 		
+		UIStroke.Name = "UIStroke"
 		UIStroke.Color = Color3.fromRGB(21,21,21)
 		UIStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
 		UIStroke.Thickness = 1.25
+		UIStroke.Parent = Tab
 		
 		local Container = Instance.new("ScrollingFrame")
 		local ContainerLayout = Instance.new("UIListLayout")
