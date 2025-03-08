@@ -401,7 +401,9 @@ function Flux:Window(text, bottom,mainclr,toclose)
 		local Tab = Instance.new("TextButton")
 		local TabIcon = Instance.new("ImageLabel")
 		local TabTitle = Instance.new("TextLabel")
-
+		local UICorner = Instance.new("UICorner")
+		local UIStroke = Instance.new("UIStroke")
+		
 		Tab.Name = "Tab"
 		Tab.Parent = TabHold
 		Tab.BackgroundColor3 = PresetColor
@@ -435,7 +437,14 @@ function Flux:Window(text, bottom,mainclr,toclose)
 		TabTitle.TextSize = 15.000
 		TabTitle.TextXAlignment = Enum.TextXAlignment.Left
 		TabTitle.TextTransparency = .3
-
+		
+		UICorner.Name = "UICorner"
+		UICorner.Parent = Tab
+		
+		UIStroke.Color = Color3.fromRGB(21,21,21)
+		UIStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+		UIStroke.Thickness = 1.25
+		
 		local Container = Instance.new("ScrollingFrame")
 		local ContainerLayout = Instance.new("UIListLayout")
 
