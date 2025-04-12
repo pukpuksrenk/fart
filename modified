@@ -172,7 +172,7 @@ function Flux:Window(text, bottom,mainclr,toclose)
 	TabLayout.Name = "TabLayout"
 	TabLayout.Parent = TabHold
 	TabLayout.SortOrder = Enum.SortOrder.LayoutOrder
-	TabLayout.Padding = UDim.new(0, 3)
+	TabLayout.Padding = UDim.new(0, 5)
 
 	Drag.Name = "Drag"
 	Drag.Parent = MainFrame
@@ -223,7 +223,7 @@ function Flux:Window(text, bottom,mainclr,toclose)
 		local NotificationDesc = Instance.new("TextLabel")
 		local UICorner = Instance.new("UICorner")
 		local UIStroke = Instance.new("UIStroke")
-
+		local UIStrokeBtn = Instance.new("UIStroke")
 
 		NotificationBase.Name = "NotificationBase"
 		NotificationBase.Parent = MainFrame
@@ -246,6 +246,12 @@ function Flux:Window(text, bottom,mainclr,toclose)
 		UIStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
 		UIStroke.Thickness = 1.25
 		UIStroke.Parent = NotificationBase
+
+		UIStrokeBtn.Name = "UIStroke"
+		UIStrokeBtn.Color = Color3.fromRGB(21,21,21)
+		UIStrokeBtn.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+		UIStrokeBtn.Thickness = 1.25
+		UIStrokeBtn.Parent = CloseBtn
 
 		NotificationBaseCorner.CornerRadius = UDim.new(0, 5)
 		NotificationBaseCorner.Name = "NotificationBaseCorner"
