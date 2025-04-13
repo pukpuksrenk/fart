@@ -7,7 +7,7 @@ local lib = loadstring(game:HttpGet"https://raw.githubusercontent.com/pukpuksren
 local ItemIcons = require(game:GetService("ReplicatedStorage").Items.ItemList)
 local WeaponData = require(game:GetService("ReplicatedStorage").Weapons.WeaponData)
 _G.closeBind = Enum.KeyCode.RightShift
-local win = lib:Window("Elysium", "Version - 2.0.3", Color3.fromRGB(207,72,3), _G.closeBind)
+local win = lib:Window("Elysium", "Version - 2.0.4", Color3.fromRGB(207,72,3), _G.closeBind)
 local Visuals = win:Tab("Visuals","rbxassetid://6851126250")
 local Player = win:Tab("Player", "http://www.roblox.com/asset/?id=6023426915")
 local LVLTab = win:Tab("Level", "rbxassetid://4458807048")
@@ -311,6 +311,13 @@ end
 --// Loops //
 task.spawn(function()
 	while task.wait() do
+		if Variables.BypassDisguise then
+			for i,v in pairs(workspace:GetDescendants()) do
+				if v.Name == "DisguiseNeeded" then
+					v.Name = v.Name.."1"
+				end
+			end
+		end
 		for i,v in pairs(TrashFolder:GetChildren()) do 
 			v.Color = Colors.OwnTracer
 			v.WHTracer.Color3 = Colors.OwnTracer
