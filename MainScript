@@ -1,0 +1,451 @@
+if ELYSIUM_LOADED then
+	warn("Elysium is already loaded!")
+	return
+end	
+pcall(function() getgenv().ELYSIUM_LOADED = true end)
+local lib = loadstring(game:HttpGet"https://raw.githubusercontent.com/pukpuksrenk/fart/refs/heads/main/modified")()
+local ItemIcons = require(game:GetService("ReplicatedStorage").Items.ItemList)
+local WeaponData = require(game:GetService("ReplicatedStorage").Weapons.WeaponData)
+_G.closeBind = Enum.KeyCode.RightShift
+local win = lib:Window("Elysium", "Version - 2.0.2", Color3.fromRGB(207,72,3), _G.closeBind)
+local Visuals = win:Tab("Visuals","rbxassetid://6851126250")
+local Player = win:Tab("Player", "http://www.roblox.com/asset/?id=6023426915")
+local LVLTab = win:Tab("Level", "rbxassetid://4458807048")
+local Weapon = win:Tab("Weapons", "rbxassetid://105540078")
+local Config = win:Tab("Configs", "rbxassetid://2161586632")
+local Level = workspace.Level
+local Character
+local Actors = Level.Actors
+function extractNumber(fileName)
+	return tonumber(fileName:match("(%d+)")) or 0
+end
+function getConfigFileName(filePath)
+	local cleanedPath = filePath:match("^%d+ (.+)$") or filePath
+	local fileName = cleanedPath:match("([^\\]+)$")
+	return fileName
+end
+local ConfigFolder = "ElysiumEP"
+local ConfigFiles = {}
+--// File system //
+if not isfolder(ConfigFolder) then
+	makefolder(ConfigFolder)
+else 
+	ConfigFiles = {}
+	local Configs = listfiles(ConfigFolder)
+	for i, v in ipairs(Configs) do
+		local CFGNAME = getConfigFileName(v)
+		table.insert(ConfigFiles, CFGNAME)
+	end
+	table.sort(ConfigFiles, function(a, b)
+		return extractNumber(a) < extractNumber(b)
+	end)
+end
+local CfgTab = {
+	Selected = ""
+}
+--// File system //
+local TrashFolder = Instance.new("Folder",workspace)
+TrashFolder.Name = "ElysiumTrash"
+local WIF = {
+	["F57"] = {Name = "F57", PenFactor = 10},
+	["CBR-C"] = {Name = "CBR-C", PenFactor = 10},
+	["MM20"] = {Name = "MM20", PenFactor = 23},
+	["S97"] = {Name = "S97", PenFactor = 10},
+	["Sawblade"] = {Name = "Sawblade", PenFactor = 15},
+	["Thumper"] = {Name = "Thumper", PenFactor = 15},
+	["CH-A"] = {Name = "CH-A", PenFactor = 5},
+	["480 MCS"] = {Name = "480 MCS", PenFactor = 50},
+	["Raven"] = {Name = "Raven", PenFactor = 25},
+	["K45"] = {Name = "K45", PenFactor = 25},
+	["UP9"] = {Name = "UP9", PenFactor = 23}
+}
+local Variables = {
+	BypassInteract = false,
+	NPCESP = false,
+	Wallshot = false,
+	InfAmmo = false,
+	OwnTracers = false,
+	SetLean = false,
+	LeanValue = 0,
+	AntiAim = false,
+	BypassDisguise = false
+}
+local Colors = {
+	OwnTracer = Color3.fromRGB(255, 255, 255)
+}
+local AmmoTable = {}
+Player:Toggle("Bypass Interaction Classes", "Allows you to interact with specific classes actions", false, function(t) -- t can be anything, choose false or true for what is the value in default
+	Variables.BypassInteract = t
+	if t then 
+		for i,v in pairs(workspace:GetDescendants()) do
+			if v.Name == "ReqThief" or v.Name == "ReqEngineer" or v.Name == "ReqHacker" then
+				v.Name = v.Name.."1"
+			end
+		end
+	else 
+		for i,v in pairs(workspace:GetDescendants()) do
+			if v.Name == "ReqThief1" or v.Name == "ReqEngineer1" or v.Name == "ReqHacker1" then
+				v.Name = string.gsub(v.Name,"1","")
+			end
+		end
+	end
+end)
+LVLTab:Toggle("Bypass chip readers disguise", "Allows you to unlock chip readers without required disguise", false, function(t) -- t can be anything, choose false or true for what is the value in default
+	Variables.BypassDisguise = t
+	if t then 
+		for i,v in pairs(workspace:GetDescendants()) do
+			if v.Name == "DisguiseNeeded" then
+				v.Name = v.Name.."1"
+			end
+		end
+	else 
+		for i,v in pairs(workspace:GetDescendants()) do
+			if v.Name == "DisguiseNeeded1" then
+				v.Name = string.gsub(v.Name,"1","")
+			end
+		end
+	end
+end)
+Visuals:Toggle("Bullet Tracers", "Shows your bullet trajectory.", false, function(t) -- t can be anything, choose false or true for what is the value in default
+	Variables.OwnTracers = t
+end)
+Player:Button("Disable Metal Detectors","Prevents metal detectors from triggering alarm", function() -- Description is the text you'll see when you click on the arrow at the right of the button
+	for i,v in pairs(workspace.Level.Triggers:GetChildren()) do 
+		if v.Name == "Detector" then
+			v:FindFirstChildOfClass("TouchTransmitter"):Destroy()
+		end
+	end
+end)
+local NPCESP = Visuals:Toggle("NPC ESP", "Lets you see NPC's through walls", false, function(t) -- t can be anything, choose false or true for what is the value in default
+	Variables.NPCESP = t
+	if t then
+		for i,v in pairs(workspace.Level.Actors:GetChildren()) do 
+			if v.Character then
+				local ESP = Instance.new('Highlight')
+				ESP.Parent = v
+				ESP.Name = "ESP"
+				ESP.FillColor = Color3.fromRGB(0, 0, 0)
+				ESP.FillTransparency = 1
+				ESP.OutlineColor = Color3.fromRGB(255, 0,0)
+				ESP.OutlineTransparency = 0
+				local char = v.Character
+				if char:FindFirstChild("Inventory") then
+					local keycard_Find = char.Inventory:FindFirstChild("KeycardBlue")
+					local keycard_Find_V = char.Inventory:FindFirstChild("KeycardRed")
+					local keycard_Find_HS = char.Inventory:FindFirstChild("KeycardHS")
+					local usb_Find = v.Inventory:FindFirstChild("USB")
+					if usb_Find then
+						v.ESP.OutlineColor = Color3.fromRGB(255, 106, 6)
+						v.ESP.FillColor = Color3.fromRGB(255, 106, 6)
+						v.ESP.FillTransparency = 0.5
+						print("NPC With USB Found!")
+					elseif keycard_Find_HS then
+						v.ESP.OutlineColor = Color3.fromRGB(255, 255, 0)
+						print("NPC With Vault Keycard Found!")
+					elseif keycard_Find then
+						v.ESP.OutlineColor = Color3.fromRGB(85, 255, 0)
+						print("NPC With High Security Keycard Found!")
+					end	
+				end
+			end
+		end
+	else 
+		for i,v in pairs(workspace.Level.Actors:GetDescendants()) do 
+			if v:IsA("Highlight") then
+				v:Destroy()
+			end
+		end
+	end
+end)
+
+Actors.ChildAdded:Connect(function(v)
+	if Variables.NPCESP then
+		local ESP = Instance.new('Highlight')
+		ESP.Parent = v
+		ESP.Name = "ESP"
+		ESP.FillColor = Color3.fromRGB(0, 0, 0)
+		ESP.FillTransparency = 1
+		ESP.OutlineColor = Color3.fromRGB(255, 0,0)
+		ESP.OutlineTransparency = 0
+		local char = v.Character
+		if char:FindFirstChild("Inventory") then
+			local keycard_Find = char.Inventory:FindFirstChild("KeycardBlue")
+			local keycard_Find_V = char.Inventory:FindFirstChild("KeycardRed")
+			local keycard_Find_HS = char.Inventory:FindFirstChild("KeycardHS")
+			local usb_Find = v.Inventory:FindFirstChild("USB")
+			if usb_Find then
+				v.ESP.OutlineColor = Color3.fromRGB(255, 106, 6)
+				v.ESP.FillColor = Color3.fromRGB(255, 106, 6)
+				v.ESP.FillTransparency = 0.5
+				print("NPC With USB Found!")
+			elseif keycard_Find_HS then
+				v.ESP.OutlineColor = Color3.fromRGB(255, 255, 0)
+				print("NPC With Vault Keycard Found!")
+			elseif keycard_Find then
+				v.ESP.OutlineColor = Color3.fromRGB(85, 255, 0)
+				print("NPC With High Security Keycard Found!")
+			end	
+		end
+	end
+end)
+Weapon:Toggle("Wallshot", "Makes your weapon penetrate everything.", false, function(t)
+	Variables.Wallshot = t
+	print("Toggle state:", t)
+	for i, v in pairs(WIF) do
+		if WeaponData[v.Name] then
+			if t == true then
+				WeaponData[v.Name].PenFactor = 0
+			else
+				WeaponData[v.Name].PenFactor = v.PenFactor
+			end
+		end
+	end
+end)
+Weapon:Toggle("Infinite Ammo", "Infinite Ammo, works by freezing ammo values, doesn't work on thumper. If your ammo is lower than 10, it will set your ammo amount to 50.", false, function(t)
+	Variables.InfAmmo = t
+	AmmoTable = {}
+	if t then
+		for i,v in pairs(game:GetService("Players").LocalPlayer:WaitForChild("Status").Ammo:GetChildren()) do
+			if v.Name ~= "40mm Grenade" then
+				if v.Value < 10 then
+					v.Value = 50
+				end
+			end
+		end
+		for i,v in pairs(game:GetService("Players").LocalPlayer:WaitForChild("Status").Ammo:GetChildren()) do
+			if v.Name ~= "40mm Grenade" then
+				if v.Value < 10 then
+					v.Value = 50
+				end
+				AmmoTable[v.Name] = v.Value
+			end
+		end
+	end
+end)
+local func 
+task.spawn(function()
+	local Active = false
+	repeat
+		wait()
+	until game:GetService("Players").LocalPlayer.Character
+	local func = game:GetService("Players").LocalPlayer.Character.ChildAdded:Connect(function(v)
+		if Variables.OwnTracers then
+			if v.Name == "Bullet" then
+				local Tracer = v:Clone()
+				Tracer.Color = Colors.OwnTracer
+				Tracer.Parent = TrashFolder
+				Tracer.Material = Enum.Material.SmoothPlastic
+				Tracer.Name = "ElysiumTracer"
+				Tracer.Size = Vector3.new(0.075,v.Size.Y,0.075)
+				local SGFront = Instance.new("SurfaceGui")
+				SGFront.Parent = Tracer
+				SGFront.Face = "Front"
+				SGFront.Adornee = Tracer
+				SGFront.AlwaysOnTop = true
+				local FRFront = Instance.new("Frame")
+				FRFront.Parent = SGFront
+				FRFront.Size = UDim2.fromScale(1, 1)
+				FRFront.Name = "Frame"
+				FRFront.BackgroundColor3 = Colors.OwnTracer
+				local SGBack = Instance.new("SurfaceGui")
+				SGBack.Parent = Tracer
+				SGBack.Face = "Back"
+				SGBack.Adornee = Tracer
+				SGBack.AlwaysOnTop = true
+				local FRBack = Instance.new("Frame")
+				FRBack.Parent = SGBack
+				FRBack.Size = UDim2.fromScale(1, 1)
+				FRBack.Name = "Frame"
+				FRBack.BackgroundColor3 = Colors.OwnTracer
+				local SGLeft = Instance.new("SurfaceGui")
+				SGLeft.Parent = Tracer
+				SGLeft.Face = "Left"
+				SGLeft.Adornee = Tracer
+				SGLeft.AlwaysOnTop = true
+				local FRLeft = Instance.new("Frame")
+				FRLeft.Parent = SGLeft
+				FRLeft.Size = UDim2.fromScale(1, 1)
+				FRLeft.Name = "Frame"
+				FRLeft.BackgroundColor3 = Colors.OwnTracer
+				local SGRight = Instance.new("SurfaceGui")
+				SGRight.Parent = Tracer
+				SGRight.Face = "Right"
+				SGRight.Adornee = Tracer
+				SGRight.AlwaysOnTop = true
+				local FRRight = Instance.new("Frame")
+				FRRight.Parent = SGRight
+				FRRight.Size = UDim2.fromScale(1, 1)
+				FRRight.Name = "Frame"
+				FRRight.BackgroundColor3 = Colors.OwnTracer
+				local SGTop = Instance.new("SurfaceGui")
+				SGTop.Parent = Tracer
+				SGTop.Face = "Top"
+				SGTop.Adornee = Tracer
+				SGTop.AlwaysOnTop = true
+				local FRTop = Instance.new("Frame")
+				FRTop.Parent = SGTop
+				FRTop.Size = UDim2.fromScale(1, 1)
+				FRTop.Name = "Frame"
+				FRTop.BackgroundColor3 = Colors.OwnTracer
+				local SGBottom = Instance.new("SurfaceGui")
+				SGBottom.Parent = Tracer
+				SGBottom.Face = "Bottom"
+				SGBottom.Adornee = Tracer
+				SGBottom.AlwaysOnTop = true
+				local FRBottom = Instance.new("Frame")
+				FRBottom.Parent = SGBottom
+				FRBottom.Size = UDim2.fromScale(1, 1)
+				FRBottom.Name = "Frame"
+				FRBottom.BackgroundColor3 = Colors.OwnTracer
+				wait(4)
+				game:GetService("TweenService"):Create(FRFront, TweenInfo.new(0.9, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), {BackgroundTransparency = 1}):Play()
+				game:GetService("TweenService"):Create(FRBack, TweenInfo.new(0.9, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), {BackgroundTransparency = 1}):Play()
+				game:GetService("TweenService"):Create(FRLeft, TweenInfo.new(0.9, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), {BackgroundTransparency = 1}):Play()
+				game:GetService("TweenService"):Create(FRRight, TweenInfo.new(0.9, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), {BackgroundTransparency = 1}):Play()
+				game:GetService("TweenService"):Create(FRTop, TweenInfo.new(0.9, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), {BackgroundTransparency = 1}):Play()
+				game:GetService("TweenService"):Create(FRBottom, TweenInfo.new(0.9, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), {BackgroundTransparency = 1}):Play()
+				game:GetService("TweenService"):Create(Tracer,TweenInfo.new(0.9,Enum.EasingStyle.Sine,Enum.EasingDirection.Out),{Transparency = 1}):Play()
+				game:GetService("Debris"):AddItem(Tracer,0.8)
+			end
+		end
+	end)
+end)
+Player:Toggle("Title", "Description", false, function(t) -- t can be anything, choose false or true for what is the value in default
+	--Enter script here
+	-- t is the boolean value
+end)
+
+Player:Bind("Title", Enum.KeyCode.Q, function() -- Change the key for a base key, you can change it via GUI too, there is no description
+	-- Enter script here
+end)
+
+Player:Textbox("Title", "Description", true, function(t) -- true or false to toggle if the text disappears after typing in
+	-- Enter script here
+	-- t is the inserted text
+end)
+Visuals:Colorpicker("Tracer Colors", Colors.OwnTracer, function(t) -- Color is the base color
+	Colors.OwnTracer = t
+end)
+
+
+--[[ Slider has 2 commands, the first command is obviously :
+
+tab:Slider("Title", "Description", 0, 100, 50, function(t) -- 0 is the minimum, 100 is the maximum, 50 is the base value <--(it's glitchy for me with negative limits)
+-- Enter script here
+-- t is the value of the slider
+end)
+
+]]
+
+-- The other command needs the Slider to be a value, example :
+--// Ammo Handler //
+for i,v in pairs(game:GetService("Players").LocalPlayer:WaitForChild("Status").Ammo:GetChildren()) do
+	if v.Name ~= "40mm Grenade" then
+		v.Changed:Connect(function(new)
+			if Variables.InfAmmo then
+				if new < AmmoTable[v.Name] then
+					v.Value = AmmoTable[v.Name]
+				end
+				if new > AmmoTable[v.Name] then
+					AmmoTable[v.Name] = v.Value
+				end
+			end
+		end)
+	end
+end
+--// End Handler //
+--// Loops //
+task.spawn(function()
+	while task.wait() do
+		for i,v in pairs(TrashFolder:GetChildren()) do 
+			v.Color = Colors.OwnTracer
+			for i,b in pairs(v:GetChildren()) do 
+				b.Frame.BackgroundColor3 = Colors.OwnTracer
+			end
+		end
+		if Variables.SetLean then
+			game:GetService("Players").LocalPlayer.PlayerGui:WaitForChild("Animate").SetLean:Fire(Variables.LeanValue/10)
+		end
+		if Variables.AntiAim then
+			local cf = {2,-2}
+			game:GetService("Players").LocalPlayer.PlayerGui:WaitForChild("Animate").CameraUpdate:Fire(cf[math.random(1,2)])
+		end
+	end
+end)
+--// End loops //
+local surfingOnInternet = Player:Slider("Title", "Description", 0, 100, 50, function(t)
+	print(t)
+end)
+Player:Toggle("Shaking head", "Makes your head shake, look like anti-aims or smth.", false, function(t) -- t can be anything, choose false or true for what is the value in default
+	Variables.AntiAim = t
+	if t then
+		local cf = {2,-2}
+		game:GetService("Players").LocalPlayer.PlayerGui:WaitForChild("Animate").CameraUpdate:Fire(cf[math.random(1,2)])
+	else
+		game:GetService("Players").LocalPlayer.PlayerGui:WaitForChild("Animate").CameraUpdate:Fire(0)
+	end
+end)
+Player:Toggle("Set lean", "Allows you to set custom lean Value", false, function(t) -- t can be anything, choose false or true for what is the value in default
+	Variables.SetLean = t
+	if t then
+		game:GetService("Players").LocalPlayer.PlayerGui.Animate.SetLean:Fire(Variables.LeanValue/10)
+	else 
+		game:GetService("Players").LocalPlayer.PlayerGui.Animate.SetLean:Fire(0)
+	end
+end)
+local Setlean = Player:Slider("Set lean value", "Select value you want.", 0, 100, 0, function(t)
+	if Variables.SetLean then
+		Variables.LeanValue = t
+		game:GetService("Players").LocalPlayer.PlayerGui.Animate.SetLean:Fire(t/10)
+	end
+end)
+--surfingOnInternet:Change(50) -- Will change the base value of the slider to the value entered
+
+--[[ Dropdown has 3 commands, the first command is obviously :
+
+tab:Dropdown("Title", {"Insert" "List" "Here"}, function(t) -- Turns into a ScrollingFrame with more than 3 items in the list
+-- Enter script here
+-- t is the selected item
+end)
+
+]]
+
+-- The 2 other commands need the Dropdown to be a value, example :
+
+local Enjoy = Player:Dropdown("Title", {"Insert", "List"}, function(t)
+	print(t)
+
+end)
+
+Enjoy:Add("Here") -- will add "Here" to the dropdown, the items will now be Enter; List; Here
+local ConfigSelect = Config:Dropdown("Select config file.", ConfigFiles, function(t)
+	print(t)
+end)
+Config:Button("Load", "Loads all your settings from file.", function(t)
+	print("Da")
+end)
+Config:Button("Delete", "Deletes config file.", function(t)
+	print("Da")
+end)
+Config:Button("Update", "Updates list of configs", function(t)
+	ConfigSelect:Clear()
+	ConfigFiles = {}
+	local Configs = listfiles(ConfigFolder)
+	for i, v in ipairs(Configs) do
+		local CFGNAME = getConfigFileName(v)
+		table.insert(ConfigFiles, CFGNAME)
+	end
+	table.sort(ConfigFiles, function(a, b)
+		return extractNumber(a) < extractNumber(b)
+	end)
+	for _, fileName in ipairs(ConfigFiles) do
+		ConfigSelect:Add(fileName)
+	end
+	lib:Notification("Notification","Updated list.", "OK")
+end)
+Config:Button("Create config", "Creates config file with all your settings.", function(t)
+	local numbar = #listfiles("ElysiumEP") + 1
+	table.insert(ConfigFiles,"config_"..numbar..".ely")
+	writefile("/"..ConfigFolder.."/config_"..numbar..".ely", "Nothing here bro.") 
+	ConfigSelect:Add("config_"..numbar..".ely")
+end)
