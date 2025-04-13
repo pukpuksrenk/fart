@@ -325,6 +325,13 @@ task.spawn(function()
 	end
 end)
 --// End loops //
+workspace.DescendantAdded:Connect(function(v)
+	if Variables.OverrideInteract then
+		if v.Name == "InUse" then
+			v.Name = v.Name.."1"
+		end
+	end
+end)
 local surfingOnInternet = Player:Slider("Title", "Description", 0, 100, 50, function(t)
 	print(t)
 end)
