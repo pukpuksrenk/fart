@@ -68,7 +68,8 @@ local Variables = {
 	SetLean = false,
 	LeanValue = 0,
 	AntiAim = false,
-	BypassDisguise = false
+	BypassDisguise = false,
+	OverrideInteract = false
 }
 local Colors = {
 	OwnTracer = Color3.fromRGB(255, 255, 255)
@@ -101,6 +102,22 @@ LVLTab:Toggle("Bypass chip readers disguise", "Allows you to unlock chip readers
 	else 
 		for i,v in pairs(workspace:GetDescendants()) do
 			if v.Name == "DisguiseNeeded1" then
+				v.Name = string.gsub(v.Name,"1","")
+			end
+		end
+	end
+end)
+Player:Toggle("Override interaction", "Allows you to interact with anything when someone other uses it.", false, function(t) -- t can be anything, choose false or true for what is the value in default
+	Variables.OverrideInteract = t
+	if t then 
+		for i,v in pairs(workspace:GetDescendants()) do
+			if v.Name == "InUse" then
+				v.Name = v.Name.."1"
+			end
+		end
+	else 
+		for i,v in pairs(workspace:GetDescendants()) do
+			if v.Name == "InUse1" then
 				v.Name = string.gsub(v.Name,"1","")
 			end
 		end
