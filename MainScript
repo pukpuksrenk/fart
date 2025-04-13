@@ -251,73 +251,15 @@ task.spawn(function()
 				Tracer.Material = Enum.Material.SmoothPlastic
 				Tracer.Name = "ElysiumTracer"
 				Tracer.Size = Vector3.new(0.075,v.Size.Y,0.075)
-				local SGFront = Instance.new("SurfaceGui")
-				SGFront.Parent = Tracer
-				SGFront.Face = "Front"
-				SGFront.Adornee = Tracer
-				SGFront.AlwaysOnTop = true
-				local FRFront = Instance.new("Frame")
-				FRFront.Parent = SGFront
-				FRFront.Size = UDim2.fromScale(1, 1)
-				FRFront.Name = "Frame"
-				FRFront.BackgroundColor3 = Colors.OwnTracer
-				local SGBack = Instance.new("SurfaceGui")
-				SGBack.Parent = Tracer
-				SGBack.Face = "Back"
-				SGBack.Adornee = Tracer
-				SGBack.AlwaysOnTop = true
-				local FRBack = Instance.new("Frame")
-				FRBack.Parent = SGBack
-				FRBack.Size = UDim2.fromScale(1, 1)
-				FRBack.Name = "Frame"
-				FRBack.BackgroundColor3 = Colors.OwnTracer
-				local SGLeft = Instance.new("SurfaceGui")
-				SGLeft.Parent = Tracer
-				SGLeft.Face = "Left"
-				SGLeft.Adornee = Tracer
-				SGLeft.AlwaysOnTop = true
-				local FRLeft = Instance.new("Frame")
-				FRLeft.Parent = SGLeft
-				FRLeft.Size = UDim2.fromScale(1, 1)
-				FRLeft.Name = "Frame"
-				FRLeft.BackgroundColor3 = Colors.OwnTracer
-				local SGRight = Instance.new("SurfaceGui")
-				SGRight.Parent = Tracer
-				SGRight.Face = "Right"
-				SGRight.Adornee = Tracer
-				SGRight.AlwaysOnTop = true
-				local FRRight = Instance.new("Frame")
-				FRRight.Parent = SGRight
-				FRRight.Size = UDim2.fromScale(1, 1)
-				FRRight.Name = "Frame"
-				FRRight.BackgroundColor3 = Colors.OwnTracer
-				local SGTop = Instance.new("SurfaceGui")
-				SGTop.Parent = Tracer
-				SGTop.Face = "Top"
-				SGTop.Adornee = Tracer
-				SGTop.AlwaysOnTop = true
-				local FRTop = Instance.new("Frame")
-				FRTop.Parent = SGTop
-				FRTop.Size = UDim2.fromScale(1, 1)
-				FRTop.Name = "Frame"
-				FRTop.BackgroundColor3 = Colors.OwnTracer
-				local SGBottom = Instance.new("SurfaceGui")
-				SGBottom.Parent = Tracer
-				SGBottom.Face = "Bottom"
-				SGBottom.Adornee = Tracer
-				SGBottom.AlwaysOnTop = true
-				local FRBottom = Instance.new("Frame")
-				FRBottom.Parent = SGBottom
-				FRBottom.Size = UDim2.fromScale(1, 1)
-				FRBottom.Name = "Frame"
-				FRBottom.BackgroundColor3 = Colors.OwnTracer
+				local WHTracer = Instance.new("BoxHandleAdornment",Tracer)
+				WHTracer.Name = "WHTracer"
+				WHTracer.Color3 = Colors.OwnTracer
+				WHTracer.Adornee = Tracer
+				WHTracer.Size = Tracer.Size
+				WHTracer.AlwaysOnTop = true
+				WHTracer.Visible = true
 				wait(4)
-				game:GetService("TweenService"):Create(FRFront, TweenInfo.new(0.9, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), {BackgroundTransparency = 1}):Play()
-				game:GetService("TweenService"):Create(FRBack, TweenInfo.new(0.9, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), {BackgroundTransparency = 1}):Play()
-				game:GetService("TweenService"):Create(FRLeft, TweenInfo.new(0.9, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), {BackgroundTransparency = 1}):Play()
-				game:GetService("TweenService"):Create(FRRight, TweenInfo.new(0.9, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), {BackgroundTransparency = 1}):Play()
-				game:GetService("TweenService"):Create(FRTop, TweenInfo.new(0.9, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), {BackgroundTransparency = 1}):Play()
-				game:GetService("TweenService"):Create(FRBottom, TweenInfo.new(0.9, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), {BackgroundTransparency = 1}):Play()
+				game:GetService("TweenService"):Create(WHTracer,TweenInfo.new(0.9,Enum.EasingStyle.Sine,Enum.EasingDirection.Out),{Transparency = 1}):Play()
 				game:GetService("TweenService"):Create(Tracer,TweenInfo.new(0.9,Enum.EasingStyle.Sine,Enum.EasingDirection.Out),{Transparency = 1}):Play()
 				game:GetService("Debris"):AddItem(Tracer,0.8)
 			end
@@ -370,9 +312,7 @@ task.spawn(function()
 	while task.wait() do
 		for i,v in pairs(TrashFolder:GetChildren()) do 
 			v.Color = Colors.OwnTracer
-			for i,b in pairs(v:GetChildren()) do 
-				b.Frame.BackgroundColor3 = Colors.OwnTracer
-			end
+			v.WHTracer.Color3 = Colors.OwnTracer
 		end
 		if Variables.SetLean then
 			game:GetService("Players").LocalPlayer.PlayerGui:WaitForChild("Animate").SetLean:Fire(Variables.LeanValue/10)
