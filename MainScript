@@ -7,7 +7,7 @@ local lib = loadstring(game:HttpGet"https://raw.githubusercontent.com/pukpuksren
 local ItemIcons = require(game:GetService("ReplicatedStorage").Items.ItemList)
 local WeaponData = require(game:GetService("ReplicatedStorage").Weapons.WeaponData)
 _G.closeBind = Enum.KeyCode.RightShift
-local win = lib:Window("Elysium", "Version - 2.0.2", Color3.fromRGB(207,72,3), _G.closeBind)
+local win = lib:Window("Elysium", "Version - 2.0.3", Color3.fromRGB(207,72,3), _G.closeBind)
 local Visuals = win:Tab("Visuals","rbxassetid://6851126250")
 local Player = win:Tab("Player", "http://www.roblox.com/asset/?id=6023426915")
 local LVLTab = win:Tab("Level", "rbxassetid://4458807048")
@@ -258,6 +258,7 @@ task.spawn(function()
 				WHTracer.Size = Tracer.Size
 				WHTracer.AlwaysOnTop = true
 				WHTracer.Visible = true
+				WHTracer.ZIndex = 0
 				wait(4)
 				game:GetService("TweenService"):Create(WHTracer,TweenInfo.new(0.9,Enum.EasingStyle.Sine,Enum.EasingDirection.Out),{Transparency = 1}):Play()
 				game:GetService("TweenService"):Create(Tracer,TweenInfo.new(0.9,Enum.EasingStyle.Sine,Enum.EasingDirection.Out),{Transparency = 1}):Play()
