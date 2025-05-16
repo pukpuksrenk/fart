@@ -6,6 +6,10 @@ local RunService = game:GetService("RunService")
 local LocalPlayer = game:GetService("Players").LocalPlayer
 local Mouse = LocalPlayer:GetMouse()
 local CloseBind = Enum.KeyCode.RightControl
+local shitserv = game:GetService("GuiService")
+local dolbaeb = false
+GuiService.MenuOpened:Connect(function() dolbaeb = true end)
+GuiService.MenuClosed:Connect(function() dolbaeb = false end)
 
 local FluxLib = Instance.new("ScreenGui")
 FluxLib.Name = "Elysium"
@@ -193,14 +197,22 @@ function Flux:Window(text, bottom,mainclr,toclose)
 		function(io, p)
 			if io.KeyCode == CloseBind then
 				if uitoggled == false then
+					if dolbaeb == false then
+						game:GetService("UserInputService").MouseIconEnabled = false
+						game:GetService("UserInputService").MouseBehavior = Enum.MouseBehavior.LockCenter
+					end
 					MainFrame:TweenSize(UDim2.new(0, 0, 0, 0), Enum.EasingDirection.Out, Enum.EasingStyle.Quart, .6, true)
 					uitoggled = true
 					wait(.5)
 					FluxLib.Enabled = false
 				else
-					MainFrame:TweenSize(UDim2.new(0, 706, 0, 484), Enum.EasingDirection.Out, Enum.EasingStyle.Quart, .6, true)
-					FluxLib.Enabled = true
-					uitoggled = false
+					if dolbaeb == false then
+						game:GetService("UserInputService").MouseIconEnabled = true
+						game:GetService("UserInputService").MouseBehavior = Enum.MouseBehavior.Default
+						MainFrame:TweenSize(UDim2.new(0, 706, 0, 484), Enum.EasingDirection.Out, Enum.EasingStyle.Quart, .6, true)
+						FluxLib.Enabled = true
+						uitoggled = false
+					end
 				end
 			end
 		end
@@ -759,6 +771,7 @@ function Flux:Window(text, bottom,mainclr,toclose)
 			Container.CanvasSize = UDim2.new(0, 0, 0, ContainerLayout.AbsoluteContentSize.Y)
 		end
 		function ContainerContent:Toggle(text, desc,default, callback)
+			local ToggleFunc = {}
 			local ToggleDescToggled = false
 			local Toggled = false
 			if desc == "" then
@@ -836,6 +849,7 @@ function Flux:Window(text, bottom,mainclr,toclose)
 			ToggleFrame.Name = "ToggleFrame"
 			ToggleFrame.Parent = Circle
 			ToggleFrame.BackgroundColor3 = Color3.fromRGB(226, 227, 227)
+			ToggleFrame.BackgroundTransparency = 0.45
 			ToggleFrame.Position = UDim2.new(33.0856934, 0, 0, 0)
 			ToggleFrame.Size = UDim2.new(0, 27, 0, 11)
 
@@ -911,12 +925,22 @@ function Flux:Window(text, bottom,mainclr,toclose)
 						TweenInfo.new(.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
 						{BackgroundColor3 =PresetColor}
 					):Play()
+					TweenService:Create(
+						ToggleFrame,
+						TweenInfo.new(.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
+						{BackgroundColor3 =PresetColor}
+					):Play()
 				else
 					ToggleCircle:TweenPosition(UDim2.new(0, 0,-0.273, 0), Enum.EasingDirection.Out, Enum.EasingStyle.Quart, .3, true)
 					TweenService:Create(
 						ToggleCircle,
 						TweenInfo.new(.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
 						{BackgroundColor3 = Color3.fromRGB(255,255,255)}
+					):Play()
+					TweenService:Create(
+						ToggleFrame,
+						TweenInfo.new(.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
+						{BackgroundColor3 =Color3.fromRGB(226, 227, 227)}
 					):Play()
 				end
 				Toggled = not Toggled
@@ -1026,6 +1050,11 @@ function Flux:Window(text, bottom,mainclr,toclose)
 				pcall(callback, Toggled)
 			end
 			Container.CanvasSize = UDim2.new(0, 0, 0, ContainerLayout.AbsoluteContentSize.Y)
+			function ToggleFunc:ChangeText(titlo,desco)
+				Title.Text = titlo
+				Description.Text = desco
+			end
+			return ToggleFunc
 		end
 
 		function ContainerContent:Slider(text,desc,min,max,start,callback)
@@ -1049,6 +1078,7 @@ function Flux:Window(text, bottom,mainclr,toclose)
 			local ArrowBtn = Instance.new("ImageButton")
 			local ArrowIco = Instance.new("ImageLabel")
 			local Value = Instance.new("TextLabel")
+			local UIGradientFill = Instance.new("UIGradient")
 
 			Slider.Name = "Slider"
 			Slider.Parent = Container
@@ -1131,6 +1161,12 @@ function Flux:Window(text, bottom,mainclr,toclose)
 			CurrentValueFrame.BackgroundColor3 = PresetColor
 			CurrentValueFrame.BorderSizePixel = 0
 			CurrentValueFrame.Size = UDim2.new((start or 0) / max, 0, 0, 3)
+			UIGradientFill.Parent = CurrentValueFrame
+			UIGradientFill.Color =  ColorSequence.new{
+				ColorSequenceKeypoint.new(0, Color3.fromRGB(0, 0, 0)),
+				ColorSequenceKeypoint.new(0.275, Color3.fromRGB(154, 59, 213)),
+				ColorSequenceKeypoint.new(1, Color3.fromRGB(167, 64, 231))
+			}
 
 			SlideCircle.Name = "SlideCircle"
 			SlideCircle.Parent = SlideFrame
@@ -1978,6 +2014,7 @@ function Flux:Window(text, bottom,mainclr,toclose)
 
 			ToggleFrame.Name = "ToggleFrame"
 			ToggleFrame.Parent = Toggle
+			ToggleFrame.BackgroundTransparency = 0.45
 			ToggleFrame.BackgroundColor3 = Color3.fromRGB(226, 227, 227)
 			ToggleFrame.Position = UDim2.new(0.778387249, 0, 0.357142866, 0)
 			ToggleFrame.Size = UDim2.new(0, 27, 0, 11)
@@ -2240,7 +2277,11 @@ function Flux:Window(text, bottom,mainclr,toclose)
 							TweenInfo.new(.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
 							{BackgroundColor3 =PresetColor}
 						):Play()
-
+						TweenService:Create(
+							ToggleFrame,
+							TweenInfo.new(.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
+							{BackgroundColor3 =PresetColor}
+						):Play()
 						OldToggleColor = BoxColor.BackgroundColor3
 						OldColor = Color.BackgroundColor3
 						OldColorSelectionPosition = ColorSelection.Position
@@ -2263,7 +2304,11 @@ function Flux:Window(text, bottom,mainclr,toclose)
 							TweenInfo.new(.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
 							{BackgroundColor3 = Color3.fromRGB(255,255,255)}
 						):Play()
-
+						TweenService:Create(
+							ToggleFrame,
+							TweenInfo.new(.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
+							{BackgroundColor3 =Color3.fromRGB(226, 227, 227)}
+						):Play()
 						BoxColor.BackgroundColor3 = OldToggleColor
 						Color.BackgroundColor3 = OldColor
 
