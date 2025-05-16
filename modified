@@ -8,8 +8,8 @@ local Mouse = LocalPlayer:GetMouse()
 local CloseBind = Enum.KeyCode.RightControl
 local shitserv = game:GetService("GuiService")
 local dolbaeb = false
-GuiService.MenuOpened:Connect(function() dolbaeb = true end)
-GuiService.MenuClosed:Connect(function() dolbaeb = false end)
+shitserv.MenuOpened:Connect(function() dolbaeb = true end)
+shitserv.MenuClosed:Connect(function() dolbaeb = false end)
 
 local FluxLib = Instance.new("ScreenGui")
 FluxLib.Name = "Elysium"
